@@ -15,6 +15,7 @@ const playBtn = document.getElementById("play");
 const downloadBtn = document.getElementById("download");
 const timer = document.querySelector('h4');
 let mediaRecorder;
+let localBlobs;
 let recordedBlobs;
 var value = [
   '名前を教えてください'
@@ -47,14 +48,10 @@ var value = [
 , 'よく利用するアプリサービスを教えてください'];
 
 var question_number=0;
-
-var startTime;
-
-//経過時刻を更新するための変数。 初めはだから0で初期化
-var elapsedTime = 0;
-
-//タイマーを止めるにはclearTimeoutを使う必要があり、そのためにはclearTimeoutの引数に渡すためのタイマーのidが必要
-var timerId;
+var startVideoTime;
+var startTimerTime;
+var elapsedTime = 0;//経過時刻を更新するための変数。 初めはだから0で初期化
+var timerId;//タイマーを止めるにはclearTimeoutを使う必要があり、そのためにはclearTimeoutの引数に渡すためのタイマーのidが必要
 
 //タイマーをストップ -> 再開させたら0になってしまうのを避けるための変数。
 var timeToadd = 0;
@@ -81,15 +78,14 @@ function updateTimetText(){
   timer.textContent = m + ':' + s+ ':' + ms;
 }
 
-
 //再帰的に使える用の関数
 function countUp(){
 
   //timerId変数はsetTimeoutの返り値になるので代入する
   timerId = setTimeout(function(){
 
-      //経過時刻は現在時刻をミリ秒で示すDate.now()からstartを押した時の時刻(startTime)を引く
-      elapsedTime = Date.now() - startTime + timeToadd;
+      //経過時刻は現在時刻をミリ秒で示すDate.now()からstartを押した時の時刻(startTimerTime)を引く
+      elapsedTime = Date.now() - startTimerTime + timeToadd;
       updateTimetText()
 
       //countUp関数自身を呼ぶことで10ミリ秒毎に以下の計算を始める
@@ -170,7 +166,7 @@ function stopRecording() {
 
 
 startBtn.addEventListener("click", () => {
-  //startTime = Date.now();
+  //startVideoTime = Date.now();
   //countUp();
 
   const constraints = {
@@ -189,8 +185,11 @@ startBtn.addEventListener("click", () => {
 
 recordBtn.addEventListener("click", () => {
   if (recordBtn.textContent === "録画開始") {
-    startTime = Date.now();
+    //録画時間の表示
+    startTimerTime = Date.now();
     countUp();
+
+    //videoの録画
     startRecording();
     recordedVideo.src=null;
   } else {
