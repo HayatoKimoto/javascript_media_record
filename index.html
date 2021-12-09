@@ -11,7 +11,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>WebRTC - MediaStream Recording</title>
+  <title>動画撮影用アプリケーション</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -29,18 +29,18 @@
       <button id="download" disabled>ダウンロード</button>
     </div>
     <div　id="instruction">
-    <h2>撮影の手順</h2>
-    <p>1.映像を取得するをクリックしてください．この時マイクを使用する，カメラを使用するかどうかが問われるので許可をクリックしてください．許可するとwebカメラの映像が表示されます．</p>
-    <p>2.画面上部に質問内容が表示されるので，その内容にあった回答を考えてください</p>
-    <p>3.動画撮影の準備ができたら，録画開始をクリックして回答をwebカメラに向かって話してください．話し終えたら録画停止をクリックしてください．</p>
-    <p>4.動画の内容は再生ボタンで確認することができます．撮り直しをしたい場合は再度録画開始をクリックすることで撮り直すことができます．</p>
-    <p>5.録画する動画が撮り終えたらダウンロードをクリックすることで動画を取得することができます．</p>
-    <p>6.ダウンロードしたら質問内容が変わっているので，再度2~5の内容を繰り返してください．</p>
+      <h2>撮影の手順</h2>
+      <p>1.映像を取得するをクリックしてください．この時マイクを使用する，カメラを使用するかどうかが問われるので許可をクリックしてください．許可するとwebカメラの映像が表示されます．</p>
+      <p>2.画面上部に質問内容が表示されるので，その内容にあった回答を考えてください</p>
+      <p>3.動画撮影の準備ができたら，録画開始をクリックして回答をwebカメラに向かって話してください．話し終えたら録画停止をクリックしてください．</p>
+      <p>4.動画の内容は再生ボタンで確認することができます．撮り直しをしたい場合は再度録画開始をクリックすることで撮り直すことができます．</p>
+      <p>5.録画する動画が撮り終えたらダウンロードをクリックすることで動画を取得することができます．</p>
+      <p>6.ダウンロードしたら質問内容が変わっているので，再度2~5の内容を繰り返してください．</p>
+    </div>
 
-
-  <!-- include adapter for srcObject shim -->
-  <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-  <script src="./index.js" async></script>
+    <!-- include adapter for srcObject shim -->
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+    <script src="./index.js" async></script>
 
   </div>
 </body>

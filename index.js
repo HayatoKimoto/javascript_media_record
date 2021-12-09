@@ -13,6 +13,7 @@ const startBtn = document.getElementById("start");
 const recordBtn = document.getElementById("record");
 const playBtn = document.getElementById("play");
 const downloadBtn = document.getElementById("download");
+const timer = document.querySelector('h4');
 let mediaRecorder;
 let recordedBlobs;
 var value = [
@@ -47,6 +48,58 @@ var value = [
 
 var question_number=0;
 
+var startTime;
+
+//経過時刻を更新するための変数。 初めはだから0で初期化
+var elapsedTime = 0;
+
+//タイマーを止めるにはclearTimeoutを使う必要があり、そのためにはclearTimeoutの引数に渡すためのタイマーのidが必要
+var timerId;
+
+//タイマーをストップ -> 再開させたら0になってしまうのを避けるための変数。
+var timeToadd = 0;
+function updateTimetText(){
+
+  //m(分) = 135200 / 60000ミリ秒で割った数の商　-> 2分
+  var m = Math.floor(elapsedTime / 60000);
+
+  //s(秒) = 135200 % 60000ミリ秒で / 1000 (ミリ秒なので1000で割ってやる) -> 15秒
+  var s = Math.floor(elapsedTime % 60000 / 1000);
+
+  //ms(ミリ秒) = 135200ミリ秒を % 1000ミリ秒で割った数の余り
+  var ms = elapsedTime % 1000;
+
+
+  //HTML 上で表示の際の桁数を固定する　例）3 => 03　、 12 -> 012
+  //javascriptでは文字列数列を連結すると文字列になる
+  //文字列の末尾2桁を表示したいのでsliceで負の値(-2)引数で渡してやる。
+  m = ('0' + m).slice(-2); 
+  s = ('0' + s).slice(-2);
+  ms = ('0' + ms).slice(-2);
+
+  //HTMLのid　timer部分に表示させる　
+  timer.textContent = m + ':' + s+ ':' + ms;
+}
+
+
+//再帰的に使える用の関数
+function countUp(){
+
+  //timerId変数はsetTimeoutの返り値になるので代入する
+  timerId = setTimeout(function(){
+
+      //経過時刻は現在時刻をミリ秒で示すDate.now()からstartを押した時の時刻(startTime)を引く
+      elapsedTime = Date.now() - startTime + timeToadd;
+      updateTimetText()
+
+      //countUp関数自身を呼ぶことで10ミリ秒毎に以下の計算を始める
+      countUp();
+
+  //1秒以下の時間を表示するために10ミリ秒後に始めるよう宣言
+  },30);
+}
+
+
 shuffleArray()
 
 function getLocalMediaStream(mediaStream) {
@@ -65,6 +118,7 @@ function handleDataAvailable(event) {
     recordedBlobs.push(event.data);
   }
 }
+
 function shuffleArray(){
   let a=value.length;
   while (a) {
@@ -116,6 +170,9 @@ function stopRecording() {
 
 
 startBtn.addEventListener("click", () => {
+  //startTime = Date.now();
+  //countUp();
+
   const constraints = {
     audio: true,
     video: {
@@ -132,9 +189,14 @@ startBtn.addEventListener("click", () => {
 
 recordBtn.addEventListener("click", () => {
   if (recordBtn.textContent === "録画開始") {
+    startTime = Date.now();
+    countUp();
     startRecording();
     recordedVideo.src=null;
   } else {
+    clearTimeout(timerId);
+    elapsedTime = 0;
+    updateTimetText();
     stopRecording();
     recordBtn.textContent = "録画開始";
     playBtn.disabled = false;
